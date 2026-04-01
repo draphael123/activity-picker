@@ -25,7 +25,6 @@ export default function Home() {
     fetchActivities()
   }, [])
 
-  // Reset page when filters change
   useEffect(() => {
     setPage(1)
   }, [activeCategory, activeStatus, activeDifficulty, activeCost, activeSetting, search, sortBy])
@@ -69,14 +68,13 @@ export default function Home() {
     }
   }
 
-  // Filtered and sorted activities
   const filtered = useMemo(() => {
     let result = activities.filter((a) => {
       if (activeCategory !== 'all' && a.category !== activeCategory) return false
       if (activeStatus === 'unrated' && a.status !== null) return false
       if (activeStatus === 'interested' && a.status !== 'interested') return false
       if (activeStatus === 'not_interested' && a.status !== 'not_interested') return false
-      if (activeStatus === 'unsure' && a.status !== 'unsure') return false
+      if (activeStatus === 'possibly_interested' && a.status !== 'possibly_interested') return false
       if (activeDifficulty !== 'all' && a.difficulty !== activeDifficulty) return false
       if (activeCost !== 'all' && a.cost !== activeCost) return false
       if (activeSetting !== 'all' && a.setting !== activeSetting) return false
@@ -84,7 +82,6 @@ export default function Home() {
       return true
     })
 
-    // Sort
     result.sort((a, b) => {
       if (sortBy === 'name') return a.name.localeCompare(b.name)
       if (sortBy === 'difficulty') {
@@ -95,22 +92,19 @@ export default function Home() {
         const order = { free: 0, cheap: 1, moderate: 2, expensive: 3 }
         return (order[a.cost] || 0) - (order[b.cost] || 0)
       }
-      // Default: category then name
       return a.category.localeCompare(b.category) || a.name.localeCompare(b.name)
     })
 
     return result
   }, [activities, activeCategory, activeStatus, activeDifficulty, activeCost, activeSetting, search, sortBy])
 
-  // Pagination
   const totalPages = Math.ceil(filtered.length / PAGE_SIZE)
   const paginatedActivities = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE)
 
-  // Counts
   const counts = useMemo(() => ({
     interested: activities.filter((a) => a.status === 'interested').length,
     not_interested: activities.filter((a) => a.status === 'not_interested').length,
-    unsure: activities.filter((a) => a.status === 'unsure').length,
+    possibly_interested: activities.filter((a) => a.status === 'possibly_interested').length,
     unrated: activities.filter((a) => a.status === null).length,
   }), [activities])
 
@@ -143,7 +137,6 @@ export default function Home() {
 
   return (
     <main className="max-w-6xl mx-auto px-4 py-8">
-      {/* Header */}
       <div className="mb-8">
         <h1 className="text-3xl font-bold mb-2">
           Activity Picker <span className="text-blue-400">🎯</span>
@@ -153,7 +146,6 @@ export default function Home() {
         </p>
       </div>
 
-      {/* Search + Sort row */}
       <div className="flex gap-3 mb-6">
         <input
           type="text"
@@ -174,7 +166,6 @@ export default function Home() {
         </select>
       </div>
 
-      {/* Filters */}
       <div className="mb-8">
         <FilterBar
           activeCategory={activeCategory}
@@ -191,14 +182,12 @@ export default function Home() {
         />
       </div>
 
-      {/* Saving indicator */}
       {saving && (
         <div className="fixed top-4 right-4 bg-blue-500/20 border border-blue-500/30 text-blue-400 text-sm px-3 py-1.5 rounded-lg animate-pulse z-50">
           Saving...
         </div>
       )}
 
-      {/* Activity grid */}
       {loading ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {[...Array(9)].map((_, i) => (
@@ -237,7 +226,6 @@ export default function Home() {
         </div>
       )}
 
-      {/* Pagination */}
       {totalPages > 1 && (
         <div className="flex items-center justify-center gap-2 mt-8">
           <button
@@ -284,7 +272,6 @@ export default function Home() {
         </div>
       )}
 
-      {/* Footer count */}
       <div className="mt-6 text-center text-sm text-slate-500">
         Showing {(page - 1) * PAGE_SIZE + 1}-{Math.min(page * PAGE_SIZE, filtered.length)} of {filtered.length} activities
         {filtered.length !== activities.length && ` (${activities.length} total)`}
