@@ -23,8 +23,8 @@ const STATUS_FILTERS = [
   { key: 'all', label: 'All', emoji: '📋' },
   { key: 'unrated', label: 'Unrated', emoji: '❓' },
   { key: 'interested', label: 'Interested', emoji: '👍' },
-  { key: 'not_interested', label: 'Not interested', emoji: '👎' },
-  { key: 'unsure', label: 'Unsure', emoji: '🤷' },
+  { key: 'not_interested', label: 'Not Interested', emoji: '👎' },
+  { key: 'possibly_interested', label: 'Possibly Interested', emoji: '🤔' },
 ]
 
 const DIFFICULTY_FILTERS = [
@@ -95,8 +95,8 @@ export default function FilterBar({
           <span className="text-slate-400 ml-1">not interested</span>
         </div>
         <div className="bg-amber-500/10 border border-amber-500/30 rounded-lg px-3 py-2 text-sm">
-          <span className="text-amber-400 font-semibold">{counts.unsure}</span>
-          <span className="text-slate-400 ml-1">unsure</span>
+          <span className="text-amber-400 font-semibold">{counts.possibly_interested}</span>
+          <span className="text-slate-400 ml-1">possibly interested</span>
         </div>
         <div className="bg-slate-700/50 border border-slate-600/30 rounded-lg px-3 py-2 text-sm">
           <span className="text-slate-300 font-semibold">{counts.unrated}</span>
