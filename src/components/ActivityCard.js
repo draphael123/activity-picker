@@ -8,21 +8,21 @@ const STATUS_CONFIG = {
     btnClass: 'hover:bg-green-500/20 hover:text-green-400',
   },
   not_interested: {
-    label: 'Not interested',
+    label: 'Not Interested',
     emoji: '👎',
     bgClass: 'bg-red-500/20 border-red-500/50 text-red-400',
     btnClass: 'hover:bg-red-500/20 hover:text-red-400',
   },
-  unsure: {
-    label: 'Unsure',
-    emoji: '🤷',
+  possibly_interested: {
+    label: 'Possibly',
+    emoji: '🤔',
     bgClass: 'bg-amber-500/20 border-amber-500/50 text-amber-400',
     btnClass: 'hover:bg-amber-500/20 hover:text-amber-400',
   },
 }
 
 const CATEGORY_EMOJI = {
-  outdoor: '🏔️',
+  outdoor: '⛰️',
   creative: '🎨',
   fitness: '💪',
   social: '🎉',
@@ -61,7 +61,7 @@ export default function ActivityCard({ activity, onStatusChange }) {
       className={`
         relative rounded-xl border p-5 transition-all duration-200
         ${currentStatus
-          ? STATUS_CONFIG[currentStatus].bgClass
+          ? STATUS_CONFIG[currentStatus]?.bgClass || 'bg-slate-800/50 border-slate-700/50'
           : 'bg-slate-800/50 border-slate-700/50 hover:border-slate-600'
         }
       `}
@@ -71,7 +71,7 @@ export default function ActivityCard({ activity, onStatusChange }) {
         <span className="text-xs font-medium uppercase tracking-wider text-slate-400">
           {categoryEmoji} {activity.category}
         </span>
-        {currentStatus && (
+        {currentStatus && STATUS_CONFIG[currentStatus] && (
           <span className="text-xs font-medium px-2 py-0.5 rounded-full bg-slate-900/50">
             {STATUS_CONFIG[currentStatus].emoji} {STATUS_CONFIG[currentStatus].label}
           </span>
